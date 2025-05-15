@@ -7,17 +7,19 @@
           class="space-x-1"
           :class="{ 'mb-2': shouldShowHelpText }"
         >
-            {{ fieldLabel }}
+            <span class="flex items-center">
+              {{ fieldLabel }}
 
-            <span v-if="field.required" class="text-red-500 text-sm">
-              {{ __('*') }}
-            </span>
+              <span v-if="field.required" class="text-red-500 text-sm">
+                {{ __('*') }}
+              </span>
 
-            <span v-if="tooltip !== ''" class="ml-1">
-              <span v-tooltip="tooltip">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-                </svg>
+              <span v-if="tooltip !== ''" class="ml-1 inline-flex">
+                <span v-tooltip="tooltip">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                  </svg>
+                </span>
               </span>
             </span>
         </FormLabel>
