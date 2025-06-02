@@ -10,7 +10,6 @@ use Laravel\Nova\Nova;
 
 class ToolTipServiceProvider extends ServiceProvider
 {
-
     public function boot(): void
     {
         Nova::script('tooltip', __DIR__.'/../dist/js/tool.js');
@@ -20,21 +19,19 @@ class ToolTipServiceProvider extends ServiceProvider
         Nova::serving(static function (ServingNova $event) {
 
             MenuItem::macro('tooltip', function (string $text) {
-                if($this->data) {
+                if ($this->data) {
                     return $this->data([...$this->data, ...['tooltip' => $text]]);
                 }
+
                 return $this->data(['tooltip' => $text]);
             });
 
-            Field::macro('tooltip',function (string $text) {
+            Field::macro('tooltip', function (string $text) {
                 return $this->withMeta(['tooltip' => $text]);
             });
 
         });
     }
 
-
-    public function register(): void
-    {
-    }
+    public function register(): void {}
 }

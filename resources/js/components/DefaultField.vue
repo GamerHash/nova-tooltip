@@ -7,29 +7,21 @@
           class="space-x-1"
           :class="{ 'mb-2': shouldShowHelpText }"
         >
+            <span class="flex items-center">
+              {{ fieldLabel }}
 
-            {{ fieldLabel }}
+              <span v-if="field.required" class="text-red-500 text-sm">
+                {{ __('*') }}
+              </span>
 
-            <span v-if="field.required" class="text-red-500 text-sm">
-              {{ __('*') }}
+              <span v-if="tooltip !== ''" class="ml-1 inline-flex">
+                <span v-tooltip="tooltip">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                  </svg>
+                </span>
+              </span>
             </span>
-
-
-          <Tooltip :triggers="['click']" v-if="tooltip!==''" class="inline ml-4">
-
-            <template v-slot:content >
-              <span v-html="tooltip"></span>
-            </template>
-
-            <Icon
-                :solid="true"
-                type="question-mark-circle"
-                class="cursor-pointer text-gray-400 dark:text-gray-500"
-            />
-
-          </Tooltip>
-
-
         </FormLabel>
       </slot>
     </div>
@@ -59,18 +51,15 @@
 </template>
 
 <script>
-import { HandlesValidationErrors, mapProps } from 'laravel-nova'
-
 export default {
-  mixins: [HandlesValidationErrors],
-
   props: {
     field: { type: Object, required: true },
     fieldName: { type: String },
     showErrors: { type: Boolean, default: true },
     fullWidthContent: { type: Boolean, default: false },
     labelFor: { default: null },
-    ...mapProps(['showHelpText']),
+    showHelpText: { type: Boolean, default: true },
+    errors: { type: Object, default: () => ({}) },
   },
 
   computed: {
@@ -114,7 +103,6 @@ export default {
      * Return the label that should be used for the field.
      */
     fieldLabel() {
-
       // If the field name is purposefully an empty string, then let's show it as such
       if (this.fieldName === '') {
         return ''
@@ -122,7 +110,6 @@ export default {
 
       return this.fieldName || this.field.name || this.field.singularLabel
     },
-
 
     /**
      * Return the tooltip that should be used for the field.
@@ -137,6 +124,25 @@ export default {
     shouldShowHelpText() {
       return this.showHelpText && this.field.helpText?.length > 0
     },
+
+    // Implementacja właściwości z HandlesValidationErrors
+    hasError() {
+      return this.errors && this.errors.has && this.errors.has(this.fieldAttribute)
+    },
+
+    firstError() {
+      if (this.hasError) {
+        return this.errors.first(this.fieldAttribute)
+      }
+    },
+
+    fieldAttribute() {
+      return this.field.attribute
+    },
+
+    errorClasses() {
+      return this.hasError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+    }
   },
 }
 </script>
